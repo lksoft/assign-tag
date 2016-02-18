@@ -25,22 +25,20 @@ module Octopress
             value    = $3
 
             if value =~ VAR_MATCH 
-              firstPart = $1
-              evaluatePart = $2
-              lastPart = $4
-              newValue = ""
+              first_part = $1
+              evaluate_part = $2
+              last_part = $4
+              new_value = ""
 
-              evaluatePart.scan (SUB_VARS) {
-                preValue = $1
-                evaluatedVar = TagHelpers::Var.get_value($3, context)
-                newValue = newValue + preValue + evaluatedVar
-                print newValue
+              evaluate_part.scan (SUB_VARS) {
+                pre_value = $1
+                evaluated_var = TagHelpers::Var.get_value($3, context)
+                new_value = new_value + pre_value + evaluated_var
+                print new_value
               }
-              value = firstPart + newValue + lastPart
-              tempvalue = TagHelpers::Var.get_value(value, context)
-              context = TagHelpers::Var.set_var(var, '=', tempvalue, context)
-              return
+              value = first_part + new_value + last_part
             end
+            
             value = TagHelpers::Var.get_value(value, context)
 
             return if value.nil?
