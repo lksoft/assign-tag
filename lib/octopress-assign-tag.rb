@@ -34,11 +34,10 @@ module Octopress
                 pre_value = $1
                 evaluated_var = TagHelpers::Var.get_value($3, context)
                 new_value = new_value + pre_value + evaluated_var
-                print new_value
               }
               value = first_part + new_value + last_part
             end
-            
+
             value = TagHelpers::Var.get_value(value, context)
 
             return if value.nil?
