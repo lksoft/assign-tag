@@ -56,6 +56,14 @@ Use fancy operators in assignment.
 {% assign title_text += ' →' if linkpost %}
 ```
 
+Use variables in assignment.
+
+```
+{% assign my_data = site.data.{{ data_file_name }} %}
+{% assign name = site.name | append:page.{{ product_name }} | downcase %}
+{% assign stupid_example = (page.{{ product_name }} == null ? 'no-product' : 'product-{{ page.product_code }} | downcase }}') %}
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/octopress/assign-tag/fork )
