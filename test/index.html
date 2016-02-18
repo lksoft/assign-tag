@@ -1,6 +1,8 @@
 ---
 layout: null
 test_array: [a, b, A, B]
+sub_var1: hello
+sub_var2: goodbye
 ---
 ## Simple assign
 yep → {% assign var1 = 'yep' %}{{ var1 }}
@@ -24,6 +26,15 @@ yepyep → {% assign var1 += 'yep' %}{{ var1 }}
 awesome → {% assign var9 = (page.layout == null ? 'awesome' : 'lame' ) %}{{ var9 }}
 AWESOME → {% assign var10 = var9 | upcase %}{{ var10 }}
 whatever-man → {% assign var11 = 'whatever man' || nil | replace:' ','-' %}{{ var11 }}
+
+## Assignment with sub variables
+sub_var1 → {% assign test_var1 = 'sub_var1' %}{{ test_var1 }}
+sub_var2 → {% assign test_var2 = 'sub_var2' %}{{ test_var2 }}
+hello → {% assign var12 = page.{{ test_var1 }} %}{{ var12 }}
+HELLO → {% assign var13 = page.{{ test_var1 }} | upcase %}{{ var13 }}
+hello-goodbye → {% assign var15 = page.{{ test_var1 }} | append:'-' | append:page.{{ test_var2 }} %}{{ var15 }}
+HELLO-GOODBYE → {% assign var16 = page.{{ test_var1 }} | append:'-' | append:page.{{ test_var2 }} | upcase %}{{ var16 }}
+complex-hello-goodbye → {% assign var17 = (page.{{ test_var1 }} != null ? 'complex-{{ page.sub_var1 }}-{{ page.sub_var2 }}' : 'lame' ) | upcase %}{{ var17 }}
 
 ## Filters on non-string variables
 {% assign items = page.test_array | sort %}{{ items }}
