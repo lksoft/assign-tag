@@ -7,6 +7,8 @@ module Octopress
     module Assign
       class Tag < Liquid::Tag
         SYNTAX = /([[:word:]]+)\s*(=|\+=|\|\|=)\s*(.*)\s*/o
+        VAR_MATCH = /([^{]*)({{(.*)}})(.*)/o
+        SUB_VARS = /([^{]*)({{\s([^}]*)\s}})/o
 
         def initialize(tag_name, markup, tokens)
           @markup = markup
@@ -22,7 +24,25 @@ module Octopress
             operator = $2
             value    = $3
 
+            if value =~ VAR_MATCH 
+              firstPart = $1
+              evaluatePart = $2
+              lastPart = $4
+              newValue = ""
+
+              evaluatePart.scan (SUB_VARS) {
+                preValue = $1
+                evaluatedVar = TagHelpers::Var.get_value($3, context)
+                newValue = newValue + preValue + evaluatedVar
+                print newValue
+              }
+              value = firstPart + newValue + lastPart
+              tempvalue = TagHelpers::Var.get_value(value, context)
+              context = TagHelpers::Var.set_var(var, '=', tempvalue, context)
+              return
+            end
             value = TagHelpers::Var.get_value(value, context)
+
             return if value.nil?
 
             context = TagHelpers::Var.set_var(var, operator, value, context)
